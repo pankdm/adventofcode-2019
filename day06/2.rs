@@ -3,11 +3,14 @@ use std::io::{BufRead, BufReader};
 use std::collections::HashMap;
 
 
-fn go(rev: &mut HashMap<String, String>, now: String, count: i64, res: &mut HashMap<String, i64>) {
-    let next = rev.entry(now.clone()).or_default().clone();
+fn go(rev: &HashMap<String, String>, now: &String, count: i64, res: &mut HashMap<String, i64>) {
     res.entry(now.clone()).or_insert(count);
-    if next != "" {
-        go(rev, next.to_string(), count + 1, res);        
+
+    match rev.get(now) {
+        Some(ref next) => {
+            go(rev, &next, count + 1, res);
+        }
+        _ => {}
     }
 }
 
@@ -28,30 +31,25 @@ fn main() {
         let from = l[0].to_string();
         let to = l[1].to_string();
 
-        let from1 = from.clone();
-        let to1 = to.clone();
-        map.entry(from).or_insert(Vec::new()).push(to);
-        rev.entry(to1).or_insert(from1);
+        map.entry(from.clone()).or_insert(Vec::new()).push(to.clone());
+        rev.entry(to.clone()).or_insert(from.clone());
     }
-    let mut start = "";
+    let mut start = "".to_string();
 
-    let map_iter = map.clone();
-    {
-        for (from, to) in map_iter.iter() {
-            if !rev.contains_key(from) {
-                start = from;
-                break;
-            }
+    for (from, _to) in map.iter() {
+        if !rev.contains_key(from) {
+            start = from.clone();
+            break;
         }
-        assert!(start != "");
     }
+    assert!(start != "");
 
     println!("start = {}", start);
 
     let mut you: HashMap<String, i64> = HashMap::new();
     let mut santa: HashMap<String, i64> = HashMap::new();
-    go(&mut rev, "YOU".to_string(), 0, &mut you);
-    go(&mut rev, "SAN".to_string(), 0, &mut santa);
+    go(&rev, &"YOU".to_string(), 0, &mut you);
+    go(&rev, &"SAN".to_string(), 0, &mut santa);
 
     let mut ans = -1;
 
