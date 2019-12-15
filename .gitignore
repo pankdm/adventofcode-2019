@@ -11,3 +11,11 @@ Cargo.lock
 
 # My files:
 a.out
+
+
+#Added by cargo
+#
+#already existing elements are commented out
+
+/target
+#**/*.rs.bk
