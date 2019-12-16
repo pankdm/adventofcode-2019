@@ -35,11 +35,8 @@ pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
 }
 
 
-fn mod10(v: i32) -> i32 {
-    let mut vv = v.abs() % 10;
-    assert!(vv >= 0, "vv = {}", vv);
-    assert!(vv < 10, "vv = {}", vv);
-    return vv;
+fn last_digit(v: i32) -> i32 {
+    return v.abs() % 10;
 }
 
 
@@ -79,7 +76,7 @@ fn multiply(input: &Vec<i32>, preproc: &Vec<i32>, start: usize, times: usize) ->
         p_pos += 1;
     }
 
-    let x = mod10(sum) as i32;
+    let x = last_digit(sum) as i32;
     // println!("  at pos {} -> sum = {}", times, x);
     return x;
 }
@@ -102,7 +99,16 @@ fn fft(input: Vec<i32>) -> Vec<i32> {
     return res;
 }
 
-pub fn part2(lines: &Vec<String>) -> i64 {
+fn get_slice(input: &Vec<i32>, start: usize, count: usize) -> String {
+    let mut res = String::new();
+    for i in start..start + count {
+        let ch = (input[i] as u8 + '0' as u8) as char;
+        res.push(ch);
+    }
+    return res;
+}
+
+pub fn part2(lines: &Vec<String>) -> String {
     let line = &lines[0];
     let mut init = to_digits(line);
     // println!("{:?}", input);
@@ -123,18 +129,19 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     }
     println!("using offset {}", offset);
 
+    let mut sum_elapsed = 0;
     for i in 0..100 {
         let now = Instant::now();
         input = fft(input);
+        let elapsed = now.elapsed().as_millis();
+        sum_elapsed += elapsed;
         
-        print!("iter = {}: ", i);
-        for j in 0..8 {
-            print!("{}", input[offset as usize + j]);
-        }
-        println!(", in {} ms", now.elapsed().as_millis());
-        io::stdout().flush().unwrap();
+        let slice = get_slice(&input, offset as usize, 8);
+        print!("iter = {}: {}", i, slice);
+        println!(", in {} ms, avg = {}", elapsed, sum_elapsed / (i + 1));
+        // io::stdout().flush().unwrap();
     }
-    return -1;
+    return get_slice(&input, offset as usize, 8);
 }
 
 
