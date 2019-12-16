@@ -3,7 +3,7 @@ extern crate adventofcode;
 use adventofcode::*;
 
 pub fn part1(lines: &Vec<String>) -> i64 {
-    let mut sum:i64 = 0;
+    let mut sum: i64 = 0;
     for line in lines {
         let number = parse_i64(line);
         sum += number / 3 - 2;
@@ -12,7 +12,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
 }
 
 fn total_fuel(mass: i64) -> i64 {
-    let mut sum:i64 = 0;
+    let mut sum: i64 = 0;
     let mut x = mass;
     while x >= 0 {
         let fuel = x / 3 - 2;
@@ -25,12 +25,12 @@ fn total_fuel(mass: i64) -> i64 {
 }
 
 pub fn part2(lines: &Vec<String>) -> i64 {
-    let mut sum:i64 = 0;
+    let mut sum: i64 = 0;
     for line in lines {
         let number = parse_i64(line);
         sum += total_fuel(number);
     }
-    return sum;    
+    return sum;
 }
 
 #[cfg(test)]

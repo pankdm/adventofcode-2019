@@ -3,7 +3,6 @@ use adventofcode::*;
 
 use std::collections::HashMap;
 
-
 fn follow_line(line: &String) -> HashMap<(i64, i64), i64> {
     let mut grid = HashMap::new();
 
@@ -38,7 +37,6 @@ fn follow_line(line: &String) -> HashMap<(i64, i64), i64> {
     }
     return grid;
 }
-
 
 pub fn part1(lines: &Vec<String>) -> i64 {
     assert_eq!(lines.len(), 2);

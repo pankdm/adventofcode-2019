@@ -18,7 +18,7 @@ pub fn parse_i64(s: &String) -> i64 {
         Err(e) => {
             assert!(false, "Error parsing '{}': {}", &s, e);
             unreachable!();
-        },
+        }
         Ok(value) => {
             return value;
         }

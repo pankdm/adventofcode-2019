@@ -14,7 +14,6 @@ fn to_digits(line: &String) -> Vec<i32> {
     return input;
 }
 
-
 pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
     let line = &lines[0];
     let mut input = to_digits(line);
@@ -23,7 +22,7 @@ pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
 
     for i in 0..times {
         input = fft(input);
-        
+
         print!("iter = {}: ", i);
         for i in 0..8 {
             print!("{}", input[i]);
@@ -34,11 +33,9 @@ pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
     return -1;
 }
 
-
 fn last_digit(v: i32) -> i32 {
     return v.abs() % 10;
 }
-
 
 // fn create_pattern(len: usize, times: usize) -> Vec<(i32, i32)> {
 //     let mut pattern = Vec::new();
@@ -92,7 +89,6 @@ fn fft(input: Vec<i32>) -> Vec<i32> {
         preproc.push(sum);
     }
 
-
     for i in 0..input.len() {
         res.push(multiply(&input, &preproc, i, i + 1));
     }
@@ -125,7 +121,7 @@ pub fn part2(lines: &Vec<String>) -> String {
     let mut offset = 0;
     for i in 0..7 {
         offset *= 10;
-        offset += input[i];        
+        offset += input[i];
     }
     println!("using offset {}", offset);
 
@@ -135,7 +131,7 @@ pub fn part2(lines: &Vec<String>) -> String {
         input = fft(input);
         let elapsed = now.elapsed().as_millis();
         sum_elapsed += elapsed;
-        
+
         let slice = get_slice(&input, offset as usize, 8);
         print!("iter = {}: {}", i, slice);
         println!(", in {} ms, avg = {}", elapsed, sum_elapsed / (i + 1));
@@ -143,9 +139,6 @@ pub fn part2(lines: &Vec<String>) -> String {
     }
     return get_slice(&input, offset as usize, 8);
 }
-
-
-
 
 fn main() {
     // let lines = read_input("day16/t0.txt");
@@ -155,20 +148,4 @@ fn main() {
 
     // println!("part1 = {}", part1(&lines, 100));
     println!("part2 = {}", part2(&lines));
-
-    // let line = "12345678".to_string();
-    // let mut input = to_digits(&line);
-    // println!("{:?}", input);
-
-    // for i in 0..1 {
-    //     input = fft(input);
-        
-    //     print!("iter = {}: ", i);
-    //     for i in 0..8 {
-    //         print!("{}", input[i]);
-    //     }
-    //     print!("\n");
-    //     io::stdout().flush().unwrap();
-    // }
-
 }
