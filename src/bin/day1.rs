@@ -1,6 +1,6 @@
-extern crate mylib;
+extern crate adventofcode;
 
-use mylib::*;
+use adventofcode::*;
 
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut sum:i64 = 0;

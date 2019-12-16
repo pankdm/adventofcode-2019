@@ -1,5 +1,5 @@
 [package]
-name = "mylib"
+name = "adventofcode"
 version = "0.1.0"
 authors = ["Dmitry Panin <pank.dm@gmail.com>"]
 edition = "2018"
