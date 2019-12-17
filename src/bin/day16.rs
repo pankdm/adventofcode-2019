@@ -21,7 +21,7 @@ pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
     println!("len = {}", input.len());
 
     for i in 0..times {
-        input = fft(input);
+        input = fft(input, 0);
 
         print!("iter = {}: ", i);
         for i in 0..8 {
@@ -78,7 +78,7 @@ fn multiply(input: &Vec<i32>, preproc: &Vec<i32>, start: usize, times: usize) ->
     return x;
 }
 
-fn fft(input: Vec<i32>) -> Vec<i32> {
+fn fft(input: Vec<i32>, offset: usize) -> Vec<i32> {
     let mut res = Vec::new();
     let mut preproc = Vec::new();
 
@@ -90,7 +90,11 @@ fn fft(input: Vec<i32>) -> Vec<i32> {
     }
 
     for i in 0..input.len() {
-        res.push(multiply(&input, &preproc, i, i + 1));
+        if i < offset {
+            res.push(0);
+        } else {
+            res.push(multiply(&input, &preproc, i, i + 1));
+        }
     }
     return res;
 }
@@ -123,12 +127,16 @@ pub fn part2(lines: &Vec<String>) -> String {
         offset *= 10;
         offset += input[i];
     }
-    println!("using offset {}", offset);
+    println!(
+        "using offset {}, remaining = {}",
+        offset,
+        input.len() - offset as usize
+    );
 
     let mut sum_elapsed = 0;
     for i in 0..100 {
         let now = Instant::now();
-        input = fft(input);
+        input = fft(input, offset as usize);
         let elapsed = now.elapsed().as_millis();
         sum_elapsed += elapsed;
 

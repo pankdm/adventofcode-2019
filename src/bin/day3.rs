@@ -9,7 +9,7 @@ fn follow_line(line: &String) -> HashMap<(i64, i64), i64> {
     let mut x = 0;
     let mut y = 0;
 
-    let steps = line.split(",").collect::<Vec<&str>>();
+    let steps = split_string(line, ",");
     let mut counter = 0;
     for step in steps {
         let mut dx = 0;
@@ -86,6 +86,43 @@ mod tests {
     fn test_part1() {
         let lines = read_input("day3/in.txt");
         assert_eq!(part1(&lines), 1225);
+    }
+
+    #[test]
+    fn test_part1_example1() {
+        let input = r#"
+R75,D30,R83,U83,L12,D49,R71,U7,L72
+U62,R66,U55,R34,D71,R55,D58,R83
+"#;
+        assert_eq!(part1(&to_lines(input)), 159);
+    }
+
+    #[test]
+    fn test_part1_example2() {
+        let input = r#"
+R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
+"#;
+        assert_eq!(part1(&to_lines(input)), 135);
+    }
+
+
+    #[test]
+    fn test_part2_example1() {
+        let input = r#"
+R75,D30,R83,U83,L12,D49,R71,U7,L72
+U62,R66,U55,R34,D71,R55,D58,R83
+"#;
+        assert_eq!(part2(&to_lines(input)), 610);
+    }
+
+    #[test]
+    fn test_part2_example2() {
+        let input = r#"
+R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+U98,R91,D20,R16,D67,R40,U7,R15,U6,R7
+"#.trim();
+        assert_eq!(part2(&to_lines(input)), 410);
     }
 
     #[test]
