@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 use std::fs::File;
 use std::io::{self, Write};
 use std::io::{BufRead, BufReader};
@@ -161,6 +161,20 @@ fn print_map(res: &Vec<i64>) {
     }
 }
 
+fn is_beam(x: i64, y: i64, ops: Vec<i64>) -> bool {
+    let mut vm = Vm {
+        ops: ops.clone(),
+        index: 0,
+        base: 0,
+    };
+    let mut input = VecDeque::new();
+    input.push_back(x);
+    input.push_back(y);
+    let res = process_ops(&mut vm, &mut input);
+    assert!(res.len() == 1);
+    return res[0] == 1;
+}
+
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
     // println!("ops: {:?}", ops);
@@ -174,170 +188,38 @@ pub fn part1(lines: &Vec<String>) -> i64 {
         ops.push(0);
     }
 
-    let mut vm = Vm {
-        ops,
-        index: 0,
-        base: 0,
-    };
-
-    let mut input = VecDeque::new();
-
-    let res = process_ops(&mut vm, &mut input);
-    print_map(&res);
+    // print_map(&res);
+    let mut ans = 0 as i64;
 
     let mut grid = Vec::new();
-    let mut row = Vec::new();
-    for code in &res {
-        if *code == 10 {
-            if row.len() > 0 {
-                grid.push(row.clone());
-                row = Vec::new();
+    for y in 0..50 {
+        let mut row = Vec::new();
+        for x in 0..50 {
+            let mut vm = Vm {
+                ops: ops.clone(),
+                index: 0,
+                base: 0,
+            };
+            let mut input = VecDeque::new();
+            input.push_back(x);
+            input.push_back(y);
+            let res = process_ops(&mut vm, &mut input);
+            let mut ch = ' ';
+            assert!(res.len() == 1);
+            if res[0] == 1 {
+                ch = '#';
+                ans += 1;
+            } else {
+                ch = ' ';
             }
-        } else {
-            row.push(*code as u8 as char);
+            row.push(ch);
+            print!("{}", ch);
         }
+        grid.push(row);
+        println!("");
     }
-
-    let mut ans = 0 as i64;
-    for y in 1..(grid.len() - 1) {
-        for x in 1..(grid[y].len() - 1) {
-            if grid[y][x] == '#'
-                && grid[y + 1][x] == '#'
-                && grid[y - 1][x] == '#'
-                && grid[y][x + 1] == '#'
-                && grid[y][x - 1] == '#'
-            {
-                ans += (x as i64) * (y as i64);
-            }
-        }
-    }
-
-    for code in &res {
-        if *code == 10 {
-            if row.len() > 0 {
-                grid.push(row.clone());
-                row = Vec::new();
-            }
-        } else {
-            row.push(*code as u8 as char);
-        }
-    }
-
-    let mut x0 = 0;
-    let mut y0 = 0;
-    for y in 0..grid.len() {
-        for x in 0..grid[y].len() {
-            if grid[y][x] == '^' {
-                x0 = x;
-                y0 = y;
-            }
-        }
-    }
-
-    grid[y0][x0] = '#';
-
-    let pos = Pos {
-        x: x0 as i64,
-        y: y0 as i64,
-    };
-    let path = traverse_path(&grid, pos);
-
-    let mut ans = 0 as i64;
 
     return ans;
-}
-
-type Grid = Vec<Vec<char>>;
-
-fn get_char(grid: &Grid, pos: Pos) -> char {
-    let x = pos.x;
-    let y = pos.y;
-    if y < 0 || y >= grid.len() as i64 || x < 0 || x >= grid[y as usize].len() as i64 {
-        return '.';
-    }
-    return grid[y as usize][x as usize];
-}
-
-fn is_good(grid: &Grid, pos: Pos) -> bool {
-    return get_char(grid, pos) == '#';
-}
-
-#[derive(Clone, Copy)]
-pub struct Dir {
-    dx: i64,
-    dy: i64,
-}
-
-#[derive(Clone, Copy)]
-pub struct Pos {
-    x: i64,
-    y: i64,
-}
-
-fn next_pos(p: Pos, d: Dir) -> Pos {
-    return Pos {
-        x: p.x + d.dx,
-        y: p.y + d.dy,
-    };
-}
-
-fn rotate_left(d: Dir) -> Dir {
-    return Dir {
-        dx: d.dy,
-        dy: -d.dx,
-    };
-}
-
-fn rotate_right(d: Dir) -> Dir {
-    return Dir {
-        dx: -d.dy,
-        dy: d.dx,
-    };
-}
-
-pub fn traverse_path(grid: &Grid, xy: Pos) {
-    let mut dir = Dir { dx: 0, dy: -1 };
-
-    let mut pos = xy;
-    let mut steps = 0;
-    let mut res = Vec::new();
-
-    loop {
-        let pos_forward = next_pos(pos, dir);
-        if is_good(grid, pos_forward) {
-            steps += 1;
-            pos = pos_forward.clone();
-            continue;
-        }
-
-        let ld = rotate_left(dir);
-        let pos_left = next_pos(pos, ld);
-        if is_good(grid, pos_left) {
-            res.push(steps.to_string());
-            res.push("L".to_string());
-            steps = 0;
-            dir = ld;
-            continue;
-        }
-
-        let rd = rotate_right(dir);
-        let pos_right = next_pos(pos, rd);
-        if is_good(grid, pos_right) {
-            res.push(steps.to_string());
-            res.push("R".to_string());
-            steps = 0;
-            dir = rd;
-            continue;
-        }
-
-        res.push(steps.to_string());
-        break;
-    }
-    // println!("{:?}", &res);
-    for r in &res {
-        print!("{},", r);
-    }
-    println!("");
 }
 
 pub fn part2(lines: &Vec<String>) -> i64 {
@@ -352,39 +234,117 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     while ops.len() < 10000 {
         ops.push(0);
     }
+    let mut beam = HashSet::new();
 
-    ops[0] = 2;
-    let mut vm = Vm {
-        ops,
-        index: 0,
-        base: 0,
-    };
+    let WIDTH = 100;
 
-    let mut input = VecDeque::new();
-    let lines = r#"
-A,B,B,C,A,B,C,A,B,C
-L,6,R,12,L,4,L,6
-R,6,L,6,R,12
-L,6,L,10,L,10,R,6
-n
-"#
-    .trim();
+    let mut dpx = HashMap::new();
+    let mut dpy = HashMap::new();
 
-    for ch in lines.chars() {
-        input.push_back(ch as i64);
+    let mut cy = 7;
+    let mut xmin = 0;
+    loop {
+        while !is_beam(xmin, cy, ops.clone()) {
+            xmin += 1;
+        }
+        assert!(is_beam(xmin, cy, ops.clone()));
+        let mut xmax = xmin;
+        while is_beam(xmax, cy, ops.clone()) {
+            beam.insert((xmax, cy));
+            xmax += 1;
+        }
+
+        for x in xmin..xmax {
+            let key = (x, cy);
+            dpx.insert(key, x - xmin + 1);
+            match dpy.get(&(x, cy - 1)) {
+                Some(&value) => {
+                    dpy.insert(key, value + 1);
+                }
+                _ => {
+                    dpy.insert(key, 1);
+                }
+            }
+            if dpx[&key] >= WIDTH && dpy[&key] >= WIDTH {
+                let xans = x - WIDTH + 1;
+                let yans = cy - WIDTH + 1;
+                println!("ans at X={}, Y={}", xans, yans);
+                return xans * 10000 + yans;
+            }
+        }
+        cy += 1;
+        if cy % 100 == 0 {
+            println!("at {}", cy);
+        }
     }
-    input.push_back('\n' as i64);
+}
 
-    let res = process_ops(&mut vm, &mut input);
-    print_map(&res);
-    println!("");
-    println!("{:?}", res[res.len() - 1]);
-    -1
+fn is_beam_file(x: i64, y: i64, beam: &HashSet<(i64, i64)>) -> bool {
+    return beam.contains(&(x, y));
+}
+
+pub fn part2_file(lines: &Vec<String>) -> i64 {
+    let mut beam = HashSet::new();
+    for y in 0..lines.len() {
+        let mut x = 0;
+        for ch in lines[y].chars() {
+            if ch == '#' || ch == 'O' {
+                beam.insert((x as i64, y as i64));
+            }
+            x += 1;
+        }
+    }
+
+    let WIDTH = 10;
+
+    let mut dpx = HashMap::new();
+    let mut dpy = HashMap::new();
+
+    let mut cy = 7;
+    let mut xmin = 0;
+    loop {
+        while !is_beam_file(xmin, cy, &beam) {
+            xmin += 1;
+        }
+        assert!(is_beam_file(xmin, cy, &beam));
+        let mut xmax = xmin;
+        while is_beam_file(xmax, cy, &beam) {
+            beam.insert((xmax, cy));
+            xmax += 1;
+        }
+
+        for x in xmin..xmax {
+            let key = (x, cy);
+            dpx.insert(key, x - xmin + 1);
+            match dpy.get(&(x, cy - 1)) {
+                Some(&value) => {
+                    dpy.insert(key, value + 1);
+                }
+                _ => {
+                    dpy.insert(key, 1);
+                }
+            }
+            if dpx[&key] >= WIDTH && dpy[&key] >= WIDTH {
+                println!("at {:?} -> dpx = {}, dpy = {}", &key, dpx[&key], dpy[&key]);
+                let xans = x - WIDTH + 1;
+                let yans = cy - WIDTH + 1;
+                println!("ans at X={}, Y={}", xans, yans);
+                return xans * 10000 + yans;
+            }
+        }
+        cy += 1;
+        if cy % 100 == 0 {
+            println!("at {}", cy);
+        }
+    }
 }
 
 fn main() {
-    let lines = read_input("day17/in.txt");
+    let lines = read_input("day19/in.txt");
 
-    println!("part1 = {}", part1(&lines));
+    // println!("part1 = {}", part1(&lines));
     println!("part2 = {}", part2(&lines));
+
+    // let lines = read_input("day19/t0.txt");
+    // println!("part2 = {}", part2_file(&lines));
 }

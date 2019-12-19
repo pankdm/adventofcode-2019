@@ -50,7 +50,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     return ans;
 }
 
-
 fn go2(back: &HashMap<String, String>, now: &String, count: i64, res: &mut HashMap<String, i64>) {
     res.entry(now.clone()).or_insert(count);
 
@@ -125,7 +124,6 @@ K)L
 "#;
         assert_eq!(part1(&to_lines(input)), 42);
     }
-
 
     #[test]
     fn test_part2_example1() {
