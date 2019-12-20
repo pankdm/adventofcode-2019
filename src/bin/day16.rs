@@ -148,12 +148,24 @@ pub fn part2(lines: &Vec<String>) -> String {
     return get_slice(&input, offset as usize, 8);
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part2() {
+        let lines = read_input("day16/in.txt");
+        assert_eq!(part2(&lines), "22808931");
+    }
+}
+
+
 fn main() {
     // let lines = read_input("day16/t0.txt");
     // let lines = read_input("day16/t2-t0.txt");
 
     let lines = read_input("day16/in.txt");
 
-    // println!("part1 = {}", part1(&lines, 100));
+    println!("part1 = {}", part1(&lines, 100));
     println!("part2 = {}", part2(&lines));
 }

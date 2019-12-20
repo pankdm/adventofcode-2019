@@ -162,7 +162,7 @@ fn print_map(res: &Vec<i64>) {
 }
 
 pub fn part1(lines: &Vec<String>) -> i64 {
-    let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
+    let str_ops = lines[0].split(",").collect::<Vec<&str>>();
     // println!("ops: {:?}", ops);
 
     let mut ops = Vec::new();
@@ -341,7 +341,7 @@ pub fn traverse_path(grid: &Grid, xy: Pos) {
 }
 
 pub fn part2(lines: &Vec<String>) -> i64 {
-    let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
+    let str_ops = lines[0].split(",").collect::<Vec<&str>>();
     // println!("ops: {:?}", ops);
 
     let mut ops = Vec::new();
@@ -378,8 +378,20 @@ n
     let res = process_ops(&mut vm, &mut input);
     print_map(&res);
     println!("");
-    println!("{:?}", res[res.len() - 1]);
-    -1
+    let mut ans = res[res.len() - 1];
+    println!("{:?}", res);
+    ans
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part2() {
+        let lines = read_input("day17/in.txt");
+        assert_eq!(part2(&lines), 752491);
+    }
 }
 
 fn main() {

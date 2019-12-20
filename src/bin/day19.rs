@@ -339,10 +339,29 @@ pub fn part2_file(lines: &Vec<String>) -> i64 {
     }
 }
 
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1() {
+        let lines = read_input("day19/in.txt");
+        assert_eq!(part1(&lines), 150);
+    }
+
+    #[test]
+    #[ignore]
+    fn test_part2() {
+        let lines = read_input("day19/in.txt");
+        assert_eq!(part2(&lines), 12201460);
+    }
+}
+
 fn main() {
     let lines = read_input("day19/in.txt");
 
-    // println!("part1 = {}", part1(&lines));
+    println!("part1 = {}", part1(&lines));
     println!("part2 = {}", part2(&lines));
 
     // let lines = read_input("day19/t0.txt");

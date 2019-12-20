@@ -3,8 +3,6 @@ use adventofcode::*;
 
 use std::collections::BTreeSet;
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::io::{self, Write};
-use std::time::{Duration, Instant};
 
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut visited = HashMap::new();
@@ -28,7 +26,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
                 y0 = cy;
             }
             if 'a' <= ch && ch <= 'z' {
-                final_mask |= (1 << (ch as u8 - 'a' as u8) as i64);
+                final_mask |= 1 << (ch as u8 - 'a' as u8) as i64;
             }
             cx += 1;
         }
@@ -188,7 +186,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
             }
             if 'a' <= ch && ch <= 'z' {
                 let index = (ch as u8 - 'a' as u8) as i64;
-                let bit = (1 << index);
+                let bit = 1 << index;
                 assert!(final_mask & bit == 0);
                 final_mask |= bit;
                 mapping.insert(index, (cx, cy));
@@ -256,7 +254,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 if mask_need | mask_now != mask_now {
                     continue;
                 }
-                let mut mask_next = mask_now | ((1 as i64) << index);
+                let mask_next = mask_now | ((1 as i64) << index);
                 let d_next = d_now + dist;
                 let mut indexes_next = indexes.clone();
                 indexes_next[i] = *index;
@@ -310,7 +308,7 @@ pub fn bfs(x0: i64, y0: i64, grid: &Grid) -> i64 {
             //     return d;
             // }
             for (dx, dy) in dirs.clone() {
-                let mut mask = mask_now;
+                let mask = mask_now;
                 let x = xnow + dx;
                 let y = ynow + dy;
                 let mut is_ok = false;
@@ -412,7 +410,7 @@ pub fn part2_dummy(lines: &Vec<String>) -> i64 {
             }
             if 'a' <= ch && ch <= 'z' {
                 let index = (ch as u8 - 'a' as u8) as i64;
-                let bit = (1 << index);
+                let bit = 1 << index;
                 assert!(final_mask & bit == 0);
                 final_mask |= bit;
                 mapping.insert(index, (cx, cy));
@@ -454,13 +452,31 @@ pub fn part2_dummy(lines: &Vec<String>) -> i64 {
     sum
 }
 
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1() {
+        let lines = read_input("day18/in.txt");
+        assert_eq!(part1(&lines), 7430);
+    }
+
+    #[test]
+    fn test_part2() {
+        let lines = read_input("day18/in.txt");
+        assert_eq!(part2(&lines), 1864);
+    }
+}
+
 fn main() {
     // let lines = read_input("day16/t2-t0.txt");
 
     // let lines = read_input("day18/t2.txt");
     let lines = read_input("day18/in.txt");
+    println!("part1 = {}", part1(&lines));
+    println!("part2 = {}", part2(&lines));
 
-    // println!("part1 = {}", part1(&lines));
-    // println!("part2 = {}", part2(&lines));
-    println!("part2 = {}", part2_dummy(&lines));
+    // println!("part2 = {}", part2_dummy(&lines));
 }
