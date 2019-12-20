@@ -14,7 +14,7 @@ fn to_digits(line: &String) -> Vec<i32> {
     return input;
 }
 
-pub fn part1(lines: &Vec<String>, times: usize) -> i64 {
+pub fn part1(lines: &[String], times: usize) -> i64 {
     let line = &lines[0];
     let mut input = to_digits(line);
     // println!("{:?}", input);
@@ -84,8 +84,8 @@ fn fft(input: Vec<i32>, offset: usize) -> Vec<i32> {
 
     let mut sum = 0;
     preproc.push(0);
-    for i in 0..input.len() {
-        sum += input[i];
+    for v in &input {
+        sum += *v;
         preproc.push(sum);
     }
 
@@ -101,31 +101,31 @@ fn fft(input: Vec<i32>, offset: usize) -> Vec<i32> {
 
 fn get_slice(input: &Vec<i32>, start: usize, count: usize) -> String {
     let mut res = String::new();
-    for i in start..start + count {
-        let ch = (input[i] as u8 + '0' as u8) as char;
+    for &v in input.iter().skip(start).take(count) {
+        let ch = (v as u8 + b'0') as char;
         res.push(ch);
     }
     return res;
 }
 
-pub fn part2(lines: &Vec<String>) -> String {
+pub fn part2(lines: &[String]) -> String {
     let line = &lines[0];
-    let mut init = to_digits(line);
+    let init = to_digits(line);
     // println!("{:?}", input);
     println!("init len = {}", init.len());
 
     let mut input = Vec::new();
-    for i in 0..10_000 {
-        for j in 0..init.len() {
-            input.push(init[j]);
+    for _ in 0..10_000 {
+        for d in &init {
+            input.push(*d);
         }
     }
     println!("input len = {}", input.len());
 
     let mut offset = 0;
-    for i in 0..7 {
+    for v in input.iter().take(7) {
         offset *= 10;
-        offset += input[i];
+        offset += v;
     }
     println!(
         "using offset {}, remaining = {}",
