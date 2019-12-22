@@ -183,7 +183,6 @@ pub fn part1(lines: &Vec<String>) -> i128 {
     }
 
 
-
     for i in 0..d.len() {
         if d[i] == 2019 {
             return i as i128;
@@ -439,16 +438,16 @@ cut -1
         assert_eq!(part1(&lines), 3324);
     }
 
-    // #[test]
-    // fn test_part2() {
-    //     let lines = read_input("day18/in.txt");
-    //     assert_eq!(part2(&lines), 1864);
-    // }
+    #[test]
+    fn test_part2() {
+        let lines = read_input("day22/in.txt");
+        assert_eq!(part2(&lines), 74132511136410);
+    }
 }
 
 fn main() {
     let lines = read_input("day22/in.txt");
 
-    // println!("part1 = {}", part1(&lines));
+    println!("part1 = {}", part1(&lines));
     println!("part2 = {}", part2(&lines));
 }
