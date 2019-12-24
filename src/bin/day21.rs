@@ -174,17 +174,118 @@ pub fn part1(lines: &Vec<String>) -> i64 {
         base: 0,
     };
 
+    // jump = any of A,B,C is false (hole) + D is ground (true)
+    // jump = (!A OR !B OR !C) AND D
+    // jump = !(A AND B AND C) AND D
+
+    let mut prog = r#"
+NOT T T
+AND A T
+AND B T
+AND C T
+NOT T T
+AND D T
+OR T J
+WALK
+"#.trim();
+
     let mut input = VecDeque::new();
-    input.push_back(0);
+    for c in prog.chars() {
+        input.push_back(c as u8 as i64);
+    }
+    input.push_back('\n' as u8 as i64);
 
     let res = process_ops(&mut vm, &mut input);
-
-
-    -1
+    for &v in &res {
+        if v <= 255 {
+            print!("{}", v as u8 as char);
+        }
+    }
+    let mut code = -1;
+    for i in 0..res.len() {
+        let v = res[i];
+        if v > 255 {
+            println!("at {}, v = {}", i, v);
+            code = v;
+        }
+    }
+    code
 }
 
 pub fn part2(lines: &Vec<String>) -> i64 {
-    -1
+    let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
+    // println!("ops: {:?}", ops);
+
+    let mut ops = Vec::new();
+    for str_op in str_ops {
+        ops.push(str_op.parse::<i64>().unwrap());
+    }
+
+    while ops.len() < 10000 {
+        ops.push(0);
+    }
+    let mut vm = Vm {
+        ops,
+        index: 0,
+        base: 0,
+    };
+
+    // jump = any of A,B,C is false (hole) + D is ground (true)
+    // jump = (!A OR !B OR !C) AND D
+    // jump = !(A AND B AND C) AND D
+
+    // ###.###.#...#.
+    //   0123456789
+    // 1 A
+    // 2 B
+    // 3 C
+    // 4 D
+    // 5 E
+    // 6 F
+    // 7 G
+    // 8 H
+    // 9 I
+    // jump = (need and can jump at 0)
+    //    and (5 || 8)
+    //       for 5 = 6 || 9
+    // jump = (!(A and B and C) and D) and (H or (E and (F || I)
+
+    let mut prog = r#"
+NOT T T
+AND A T
+AND B T
+AND C T
+NOT T T
+AND D T
+OR I J
+OR F J
+AND E J
+OR H J
+AND T J
+RUN
+"#.trim();
+
+    let mut input = VecDeque::new();
+    for c in prog.chars() {
+        input.push_back(c as u8 as i64);
+    }
+    input.push_back('\n' as u8 as i64);
+
+    let res = process_ops(&mut vm, &mut input);
+    for &v in &res {
+        if v <= 255 {
+            print!("{}", v as u8 as char);
+        }
+    }
+    let mut code = -1;
+    for i in 0..res.len() {
+        let v = res[i];
+        if v > 255 {
+            println!("at {}, v = {}", i, v);
+            code = v;
+        }
+    }
+    code
 }
 
 
@@ -209,8 +310,8 @@ pub fn part2(lines: &Vec<String>) -> i64 {
 fn main() {
     let lines = read_input("day21/in.txt");
 
-    println!("part1 = {}", part1(&lines));
-    // println!("part2 = {}", part2(&lines));
+    // println!("part1 = {}", part1(&lines));
+    println!("part2 = {}", part2(&lines));
 
     // let lines = read_input("day19/t0.txt");
     // println!("part2 = {}", part2_file(&lines));
