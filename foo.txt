@@ -1,0 +1,181 @@
+
+south
+south
+north
+take space heater
+west
+take wreath
+east
+west
+south
+take space law space brochure
+south
+take pointer
+west
+east
+east
+west
+north
+west
+take photons
+
+east
+inv
+north
+south
+west
+east
+south
+north
+north
+east
+north
+north
+west
+take molten lava
+east
+inv
+east
+north
+take sand
+south
+inv
+west
+east
+south
+south
+south
+east
+take loom
+inv
+west
+north
+north
+north
+north
+south
+south
+south
+south
+east
+west
+north
+south
+north
+north
+west
+west
+take festive hat
+north
+
+south
+south
+take
+
+south
+south
+north
+take space heater
+west
+take wreath
+east
+west
+south
+take space law space brochure
+south
+take pointer
+west
+east
+east
+west
+north
+west
+take photons
+
+east
+inv
+north
+south
+west
+east
+south
+north
+north
+east
+north
+north
+west
+take molten lava
+east
+inv
+east
+north
+take sand
+south
+inv
+west
+east
+south
+south
+south
+east
+take loom
+inv
+west
+north
+north
+north
+north
+south
+south
+south
+south
+east
+west
+north
+south
+north
+north
+west
+west
+take festive hat
+north
+
+south
+south
+west
+east
+north
+inv
+east
+south
+take planetoid
+north
+south
+north
+west
+east
+east
+south
+south
+east
+west
+north
+west
+south
+west
+east
+south
+west
+east
+east
+west
+north
+north
+east
+north
+west
+west
+south
+west
+west
