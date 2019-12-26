@@ -3,6 +3,8 @@ use std::io::{BufRead, BufReader};
 use std::collections::{HashMap, HashSet};
 
 
+extern crate adventofcode;
+use adventofcode::*;
 
 struct Elem {
     cnt: i64,
@@ -13,25 +15,6 @@ struct Reaction {
     output: Elem,
     inputs: Vec<Elem>,
 }
-
-
-// fn go(now: String, cnt: i64, rs: &HashMap<String, Reaction>) -> i64 {
-//     if now == "ORE" {
-//         return cnt;
-//     }
-
-//     let reaction = rs.get(&now).unwrap();
-//     let mut sum = 0;
-//     for input in &reaction.inputs {
-//         let value = go(input.type_.clone(), input.cnt, rs);
-//         sum += value;
-//     }
-//     let getting = reaction.output.cnt;
-//     let times = (cnt + getting - 1) / getting;
-//     let res = times * sum;
-//     println!("To get {} of {} need {} ORE || times = {}, getting = {}", cnt, now, res, times, getting);
-//     return res;
-// }
 
 
 fn search(rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String>>) -> i64 {
@@ -54,6 +37,7 @@ fn search(rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String
     }
     return lo;
 }
+
 
 fn iterate(desired_: &HashMap<String, i64>, rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String>>) -> i64 {
     let mut desired = desired_.clone();
@@ -100,6 +84,7 @@ fn iterate(desired_: &HashMap<String, i64>, rs: &HashMap<String, Reaction>, grap
     }
 }
 
+
 fn go_graph(now: String, rs: &HashMap<String, Reaction>, graph: &mut HashMap<String, HashSet<String>>) -> HashSet<String> {
     let mut res = HashSet::new();
     match graph.get(&now) {
@@ -126,19 +111,56 @@ fn go_graph(now: String, rs: &HashMap<String, Reaction>, graph: &mut HashMap<Str
 }
 
 
-fn main() {
-    let filename = "in.txt";
-    // let filename = "t1.txt";
-    // let STEPS = 1000;
-
-    let file = File::open(filename).unwrap();
-    let reader = BufReader::new(file);
-
+pub fn part1(lines: &Vec<String>) -> i64 {
     let mut rs = HashMap::new();
 
-    for line in reader.lines() {
-        let line_ = line.unwrap();
-        let parts = line_.split(" => ").collect::<Vec<&str>>();
+    for line in lines {
+        let parts = line.split(" => ").collect::<Vec<&str>>();
+        let _inputs = parts[0].split(", ").collect::<Vec<&str>>();
+
+        let mut inputs = Vec::new();
+        for input_ in _inputs {
+            let input = input_.split(" ").collect::<Vec<&str>>();
+            let cnt = input[0].parse::<i64>().unwrap();
+            let type_ = input[1].to_string();
+            let e_in = Elem {
+                cnt, type_
+            };
+            inputs.push(e_in);
+        }
+
+        let outputs = parts[1].split(" ").collect::<Vec<&str>>();
+        let cnt = outputs[0].parse::<i64>().unwrap();
+        let type_ = outputs[1].to_string();
+        let output = Elem{cnt, type_};
+        let r = Reaction{output, inputs};
+        rs.insert(r.output.type_.clone(), r);
+    }
+
+    let start = "FUEL".to_string();
+    let mut graph = HashMap::new();
+    go_graph(start.clone(), &rs, &mut graph);
+    for (k, v) in &graph {
+        println!("|| at key {} --> {:?}", k, v);
+    }
+    println!("  ");
+
+
+    let mut desired = HashMap::new();
+    desired.insert(start.clone(), 1);
+    let ans = iterate(&desired, &rs, &graph);
+
+    // let ans = go(start, 1, &rs);
+    println!("ans = {}", ans);
+    ans
+}
+
+
+pub fn part2(lines: &Vec<String>) -> i64 {
+    let mut rs = HashMap::new();
+
+    for line in lines {
+        let parts = line.split(" => ").collect::<Vec<&str>>();
         let _inputs = parts[0].split(", ").collect::<Vec<&str>>();
 
         let mut inputs = Vec::new();
@@ -172,4 +194,30 @@ fn main() {
 
     // let ans = go(start, 1, &rs);
     println!("ans = {}", ans);
+    ans
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1() {
+        let lines = read_input("day14/in.txt");
+        assert_eq!(part1(&lines), 1967319);
+    }
+
+    #[test]
+    fn test_part2() {
+        let lines = read_input("day14/in.txt");
+        assert_eq!(part2(&lines), 1122036);
+    }
+
+}
+
+fn main() {
+    let lines = read_input("day14/in.txt");
+
+    println!("part1 = {}", part1(&lines));
+    println!("part2 = {}", part2(&lines));
 }
