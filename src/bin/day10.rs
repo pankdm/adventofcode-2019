@@ -2,7 +2,11 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::collections::{HashMap, HashSet};
 use std::f64;
-use std::io::{self, Write};
+
+
+
+extern crate adventofcode;
+use adventofcode::*;
 
 
 fn gcd(a: i64, b: i64) -> i64 {
@@ -15,7 +19,39 @@ fn gcd(a: i64, b: i64) -> i64 {
     return gcd(a - b, b);
 }
 
-fn count_asteroid(grid: &Vec<Vec<char>>, x0: i64, y0: i64) -> i64 {
+fn count_asteroid(grid: &Vec<String>, x0: i64, y0: i64) -> i64 {
+    let mut count = 0;
+    let mut unique = HashSet::new();
+    for _y in 0..grid.len() {
+        for _x in 0..grid[_y].len() {
+            let x = _x as i64;
+            let y = _y as i64;
+            if x == x0 && y == y0 {
+                // count += 1;
+                continue;
+            }
+            if grid[_y].as_bytes()[_x] as char == '#' {
+                let dx = x - x0;
+                let dy = y - y0;
+                let d = gcd(dx.abs(), dy.abs());
+                assert!(dx % d == 0);
+                assert!(dy % d == 0);
+                let key = (dx / d, dy / d);
+                if !unique.contains(&key) {
+                    count += 1;
+                    // println!("{:?} was not found before", &key);
+                } else {
+                    // println!("  {:?} is already there", &key);
+                }
+                unique.insert(key);
+            }
+        }
+    }
+    return count;
+}
+
+
+fn count_asteroid2(grid: &Vec<Vec<char>>, x0: i64, y0: i64) -> i64 {
     let mut count = 0;
     let mut unique = HashSet::new();
     for _y in 0..grid.len() {
@@ -45,6 +81,25 @@ fn count_asteroid(grid: &Vec<Vec<char>>, x0: i64, y0: i64) -> i64 {
     }
     return count;
 }
+
+pub fn part1(lines: &Vec<String>) -> i64 {
+    let mut grid = Vec::new();
+    for line in lines {
+        grid.push(line.trim().to_string());
+    }
+
+    let mut best = 0;
+    for y in 0..grid.len() {
+        for x in 0..grid[y].len() {
+            let count = count_asteroid(&grid, x as i64, y as i64);
+            if count > best {
+                best = count;
+            }
+        }
+    }
+    best
+}
+
 
 struct Asteroid {
     x: i64,
@@ -120,18 +175,11 @@ fn sort_asteroids(grid: &mut Vec<Vec<char>>, x0: i64, y0: i64) -> Vec<Asteroid> 
     return asts;
 }
 
-fn main() {
-    let filename = "in.txt";
-    // let filename = "t2.txt";
-
-    let file = File::open(filename).unwrap();
-    let reader = BufReader::new(file);
-
-
+pub fn part2(lines: &Vec<String>) -> i64 {
     let mut grid = Vec::new();
-    for line in reader.lines() {
+    for line in lines {
         let mut row = Vec::new();
-        for ch in line.unwrap().trim().chars() {
+        for ch in line.trim().chars() {
             row.push(ch);
         }
         grid.push(row);
@@ -145,7 +193,7 @@ fn main() {
             if grid[y][x] != '#' {
                 continue;
             }
-            let count = count_asteroid(&grid, x as i64, y as i64);
+            let count = count_asteroid2(&grid, x as i64, y as i64);
             if count > best {
                 best = count;
                 xbest = x;
@@ -165,12 +213,13 @@ fn main() {
         let asts = sort_asteroids(&mut grid, xbest as i64, ybest as i64);
         if nth < asts.len() as i64 {
             let ref ast = asts[nth as usize];
-            println!("ans = {}", ast.x * 100 + ast.y);
-            break;
+            let ans = ast.x * 100 + ast.y;
+            // println!("ans = {}", ans);
+            return ans;
         }
         if asts.len() == 0 {
             println!("nothing more to remove");
-            break;
+            return -1;
         }
 
         nth -= asts.len() as i64;
@@ -179,6 +228,28 @@ fn main() {
         }
         println!("removed {} asts, left = {}", &asts.len(), nth);
     }
+}
 
 
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1() {
+        let lines = read_input("day10/in.txt");
+        assert_eq!(part1(&lines), 280);
+    }
+
+   #[test]
+    fn test_part2() {
+        let lines = read_input("day10/in.txt");
+        assert_eq!(part2(&lines), 706);
+    }
+}
+
+fn main() {
+    let lines = read_input("day10/in.txt");
+
+    println!("part1 = {}", part1(&lines));
+    println!("part2 = {}", part2(&lines));
 }

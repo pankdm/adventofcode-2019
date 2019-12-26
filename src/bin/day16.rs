@@ -153,6 +153,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn test_part2() {
         let lines = read_input("day16/in.txt");
         assert_eq!(part2(&lines), "22808931");
