@@ -1,10 +1,8 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-
 extern crate adventofcode;
 use adventofcode::*;
-
 
 pub fn part1(lines: &Vec<String>) -> i64 {
     // println!("read: {}", line);
@@ -21,7 +19,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
         if count == 0 {
             layers.push(vec![0, 0, 0]);
         }
-        let ch = line[i..i+1].chars().next().unwrap();
+        let ch = line[i..i + 1].chars().next().unwrap();
         let index = layers.len() - 1;
         let num = ch as u32 - '0' as u32;
         layers[index][num as usize] += 1;
@@ -40,7 +38,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     let mut ans = layers[best_index][1] * layers[best_index][2];
     ans
 }
-
 
 pub fn part2(lines: &Vec<String>) -> i64 {
     let width = 25;
@@ -62,7 +59,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
             layers.push(vec![0, 0, 0]);
             pics.push(Vec::new());
         }
-        let ch = line[i..i+1].chars().next().unwrap();
+        let ch = line[i..i + 1].chars().next().unwrap();
         let index = layers.len() - 1;
         let num = ch as u32 - '0' as u32;
         layers[index][num as usize] += 1;
@@ -81,7 +78,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 ans[pos] = '#';
                 break;
             }
-        } 
+        }
     }
 
     let mut counter = 0;
@@ -94,7 +91,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     }
     -1
 }
-
 
 mod tests {
     use super::*;

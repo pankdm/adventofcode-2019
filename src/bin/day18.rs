@@ -452,7 +452,6 @@ pub fn part2_dummy(lines: &Vec<String>) -> i64 {
     sum
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

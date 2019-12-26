@@ -339,7 +339,6 @@ pub fn part2_file(lines: &Vec<String>) -> i64 {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;

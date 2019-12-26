@@ -160,7 +160,6 @@ mod tests {
     }
 }
 
-
 fn main() {
     // let lines = read_input("day16/t0.txt");
     // let lines = read_input("day16/t2-t0.txt");

@@ -4,7 +4,6 @@ use adventofcode::*;
 use std::collections::BTreeSet;
 use std::collections::{HashMap, HashSet, VecDeque};
 
-
 fn is_letter(c: char) -> bool {
     'A' <= c && c <= 'Z'
 }
@@ -38,7 +37,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
                 if x > 0 && grid[y][x - 1] == '.' {
                     let pt = ((x - 1) as i64, y as i64);
                     portals.entry(s).or_insert(Vec::new()).push(pt);
-                } 
+                }
             }
             if is_letter(now) && is_letter(down) {
                 let mut s = "".to_string();
@@ -51,15 +50,15 @@ pub fn part1(lines: &Vec<String>) -> i64 {
                 if y > 0 && grid[y - 1][x] == '.' {
                     let pt = (x as i64, (y - 1) as i64);
                     portals.entry(s).or_insert(Vec::new()).push(pt);
-                }                
+                }
             }
         }
     }
 
     let mut next = HashMap::new();
 
-    let mut start:(i64, i64) = (-1, -1);
-    let mut end:(i64, i64) = (-1, -1);
+    let mut start: (i64, i64) = (-1, -1);
+    let mut end: (i64, i64) = (-1, -1);
 
     for (k, values) in portals.clone() {
         println!("{} is at {:?}", k, values);
@@ -93,8 +92,10 @@ pub fn part1(lines: &Vec<String>) -> i64 {
             return d;
         }
         let (cx, cy) = now;
-        println!("at {:?} d = {}, ch = {}", now, d, grid[cy as usize][cx as usize]);
-
+        println!(
+            "at {:?} d = {}, ch = {}",
+            now, d, grid[cy as usize][cx as usize]
+        );
 
         for (dx, dy) in &dirs {
             let mut nx = cx + dx;
@@ -157,7 +158,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 if x > 0 && grid[y][x - 1] == '.' {
                     let pt = ((x - 1) as i64, y as i64);
                     portals.entry(s).or_insert(Vec::new()).push(pt);
-                } 
+                }
             }
             if is_letter(now) && is_letter(down) {
                 let mut s = "".to_string();
@@ -170,18 +171,17 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 if y > 0 && grid[y - 1][x] == '.' {
                     let pt = (x as i64, (y - 1) as i64);
                     portals.entry(s).or_insert(Vec::new()).push(pt);
-                }                
+                }
             }
         }
     }
 
     let mut next = HashMap::new();
 
-    let mut start:(i64, i64) = (-1, -1);
-    let mut end:(i64, i64) = (-1, -1);
+    let mut start: (i64, i64) = (-1, -1);
+    let mut end: (i64, i64) = (-1, -1);
 
     let bounds = (grid[0].len() as i64, grid.len() as i64);
-
 
     for (k, values) in portals.clone() {
         println!("{} is at {:?}", k, values);
@@ -198,7 +198,13 @@ pub fn part2(lines: &Vec<String>) -> i64 {
         assert!(values.len() == 2);
         let v0 = values[0];
         let v1 = values[1];
-        println!("  added connect {:?} ({}) -> {:?} ({})", v0, is_outer(v0, bounds), v1, is_outer(v1, bounds));
+        println!(
+            "  added connect {:?} ({}) -> {:?} ({})",
+            v0,
+            is_outer(v0, bounds),
+            v1,
+            is_outer(v1, bounds)
+        );
         next.insert(v0, v1);
         next.insert(v1, v0);
     }
@@ -217,7 +223,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
         // }
         let (cx, cy) = now;
         // println!("at {:?} lvl = {}, d = {}, ch = {}", now, level, d, grid[cy as usize][cx as usize]);
-
 
         for (dx, dy) in &dirs {
             let mut nx = cx + dx;
@@ -262,9 +267,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     }
     unreachable!();
 }
-
-
-
 
 #[cfg(test)]
 mod tests {

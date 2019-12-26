@@ -1,13 +1,10 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::collections::{HashMap, HashSet};
 use std::f64;
-
-
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 extern crate adventofcode;
 use adventofcode::*;
-
 
 fn gcd(a: i64, b: i64) -> i64 {
     if a < b {
@@ -39,7 +36,7 @@ fn count_asteroid(grid: &Vec<String>, x0: i64, y0: i64) -> i64 {
                 let key = (dx / d, dy / d);
                 if !unique.contains(&key) {
                     count += 1;
-                    // println!("{:?} was not found before", &key);
+                // println!("{:?} was not found before", &key);
                 } else {
                     // println!("  {:?} is already there", &key);
                 }
@@ -49,7 +46,6 @@ fn count_asteroid(grid: &Vec<String>, x0: i64, y0: i64) -> i64 {
     }
     return count;
 }
-
 
 fn count_asteroid2(grid: &Vec<Vec<char>>, x0: i64, y0: i64) -> i64 {
     let mut count = 0;
@@ -71,7 +67,7 @@ fn count_asteroid2(grid: &Vec<Vec<char>>, x0: i64, y0: i64) -> i64 {
                 let key = (dx / d, dy / d);
                 if !unique.contains(&key) {
                     count += 1;
-                    // println!("{:?} was not found before", &key);
+                // println!("{:?} was not found before", &key);
                 } else {
                     // println!("  {:?} is already there", &key);
                 }
@@ -99,7 +95,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     }
     best
 }
-
 
 struct Asteroid {
     x: i64,
@@ -136,9 +131,7 @@ fn sort_asteroids(grid: &mut Vec<Vec<char>>, x0: i64, y0: i64) -> Vec<Asteroid> 
                 assert!(dx % d == 0);
                 assert!(dy % d == 0);
                 let slope = (dx / d, dy / d);
-                let ast = Asteroid{
-                    x, y, slope, d
-                };
+                let ast = Asteroid { x, y, slope, d };
                 if !unique.contains_key(&slope) {
                     unique.entry(slope).or_insert(ast);
                 } else {
@@ -150,7 +143,6 @@ fn sort_asteroids(grid: &mut Vec<Vec<char>>, x0: i64, y0: i64) -> Vec<Asteroid> 
             }
         }
     }
-
 
     let mut asts = Vec::new();
     for (key, ast) in unique {
@@ -207,7 +199,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     // ybest = 3;
     println!("starting at {:?}, count = {}", (xbest, ybest), best);
     grid[ybest][xbest] = 'X';
-    
+
     let mut nth = (200 as i64) - 1;
     loop {
         let asts = sort_asteroids(&mut grid, xbest as i64, ybest as i64);
@@ -230,7 +222,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     }
 }
 
-
 mod tests {
     use super::*;
 
@@ -240,7 +231,7 @@ mod tests {
         assert_eq!(part1(&lines), 280);
     }
 
-   #[test]
+    #[test]
     fn test_part2() {
         let lines = read_input("day10/in.txt");
         assert_eq!(part2(&lines), 706);

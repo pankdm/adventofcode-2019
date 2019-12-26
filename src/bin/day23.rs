@@ -163,7 +163,6 @@ fn process_ops_once(vm: &mut Vm, input: &mut VecDeque<i64>, res: &mut VecDeque<i
     // return res;
 }
 
-
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
     // println!("ops: {:?}", ops);
@@ -197,7 +196,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
         inputs.push(input);
         outputs.push(output);
     }
-        
 
     loop {
         for i in 0..50 {
@@ -221,7 +219,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
                 } else {
                     unreachable!();
                 }
-
             }
         }
     }
@@ -263,7 +260,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
         outputs.push(output);
         last_send.push(0);
     }
-        
+
     let mut natx = 0;
     let mut naty = 0;
     let mut cnt = 0;
@@ -308,7 +305,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 } else {
                     unreachable!();
                 }
-
             }
         }
         time += 1;
@@ -333,7 +329,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     }
     unreachable!();
 }
-
 
 // #[cfg(test)]
 // mod tests {

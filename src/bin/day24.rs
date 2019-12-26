@@ -43,7 +43,6 @@ fn get_inf_tile(x: i64, y: i64, level: i32, inf_grid: &InfGrid) -> char {
     ch
 }
 
-
 fn step_bugs(grid: &Grid) -> Grid {
     let mut next = grid.clone();
 
@@ -90,7 +89,6 @@ fn print_layout(grid: &Grid) {
     }
 }
 
-
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut grid = Vec::new();
     for l in lines {
@@ -126,7 +124,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     }
 }
 
-
 fn default_grid() -> Grid {
     let mut res = Vec::new();
     for y in 0..5 {
@@ -138,7 +135,6 @@ fn default_grid() -> Grid {
     }
     res
 }
-
 
 fn get_adjacent(x: i64, y: i64, level: i32) -> Vec<(i64, i64, i32)> {
     let mut dirs = Vec::new();
@@ -186,7 +182,7 @@ fn get_adjacent(x: i64, y: i64, level: i32) -> Vec<(i64, i64, i32)> {
     res
 }
 
-fn step_inf(inf_grid: &InfGrid) ->  InfGrid {
+fn step_inf(inf_grid: &InfGrid) -> InfGrid {
     let mut next = inf_grid.clone();
     for (level, grid) in inf_grid {
         for y in 0..grid.len() {
@@ -223,7 +219,6 @@ fn step_inf(inf_grid: &InfGrid) ->  InfGrid {
     }
     next
 }
-
 
 fn count_bugs(inf_grid: &InfGrid) -> i64 {
     let mut cnt = 0;
@@ -275,7 +270,6 @@ pub fn part2(lines: &Vec<String>, steps: i32) -> i64 {
     bugs
 }
 
-
 // #[cfg(test)]
 // mod tests {
 //     use super::*;
@@ -304,5 +298,4 @@ fn main() {
 
     let lines = read_input("day24/in.txt");
     println!("part2 = {}", part2(&lines, 200));
-
 }

@@ -155,7 +155,6 @@ fn process_ops(vm: &mut Vm, input: &mut VecDeque<i64>) -> Vec<i64> {
     return res;
 }
 
-
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut str_ops = lines[0].split(",").collect::<Vec<&str>>();
     // println!("ops: {:?}", ops);
@@ -187,7 +186,8 @@ NOT T T
 AND D T
 OR T J
 WALK
-"#.trim();
+"#
+    .trim();
 
     let mut input = VecDeque::new();
     for c in prog.chars() {
@@ -263,7 +263,8 @@ AND E J
 OR H J
 AND T J
 RUN
-"#.trim();
+"#
+    .trim();
 
     let mut input = VecDeque::new();
     for c in prog.chars() {
@@ -287,7 +288,6 @@ RUN
     }
     code
 }
-
 
 // #[cfg(test)]
 // mod tests {

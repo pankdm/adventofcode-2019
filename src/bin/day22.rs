@@ -8,7 +8,6 @@ use std::collections::{HashMap, HashSet, VecDeque};
 //     -1
 // }
 
-
 #[derive(Copy, Clone)]
 enum Command {
     New,
@@ -18,7 +17,6 @@ enum Command {
 
 type Deck = Vec<i128>;
 
-
 #[derive(Copy, Clone)]
 struct FastDeck {
     k: i128,
@@ -26,11 +24,9 @@ struct FastDeck {
     modulo: i128,
 }
 
-
 fn mod_op(a: i128, modulo: i128) -> i128 {
     (a % modulo + modulo) % modulo
 }
-
 
 fn reduce(f: &mut FastDeck) {
     f.k = mod_op(f.k, f.modulo);
@@ -87,14 +83,19 @@ fn apply_commands(lines: &Vec<String>, size: usize) -> Deck {
 
     for &cmd in &cmds {
         match cmd {
-            Command::New => {d = apply_new(&d);},
-            Command::Cut(value) => {d = apply_cut(&d, value);},
-            Command::Increment(value) => {d = apply_increment(&d, value);}
+            Command::New => {
+                d = apply_new(&d);
+            }
+            Command::Cut(value) => {
+                d = apply_cut(&d, value);
+            }
+            Command::Increment(value) => {
+                d = apply_increment(&d, value);
+            }
         }
     }
     d
 }
-
 
 fn standard_deck2(size: usize) -> FastDeck {
     FastDeck {
@@ -105,17 +106,17 @@ fn standard_deck2(size: usize) -> FastDeck {
 }
 
 fn apply_new2(d: &FastDeck) -> FastDeck {
-    let mut f = FastDeck{
+    let mut f = FastDeck {
         k: -d.k,
         b: -d.b - 1,
-        modulo: d.modulo
+        modulo: d.modulo,
     };
     reduce(&mut f);
     f
 }
 
 fn apply_cut2(d: &FastDeck, value: i128) -> FastDeck {
-    let mut f = FastDeck{
+    let mut f = FastDeck {
         k: d.k,
         b: d.b - value,
         modulo: d.modulo,
@@ -125,7 +126,7 @@ fn apply_cut2(d: &FastDeck, value: i128) -> FastDeck {
 }
 
 fn apply_increment2(d: &FastDeck, value: i128) -> FastDeck {
-    let mut f = FastDeck{
+    let mut f = FastDeck {
         k: value * d.k,
         b: value * d.b,
         modulo: d.modulo,
@@ -140,9 +141,15 @@ fn apply_commands2(lines: &Vec<String>, size: usize) -> FastDeck {
 
     for &cmd in &cmds {
         match cmd {
-            Command::New => {d = apply_new2(&d);},
-            Command::Cut(value) => {d = apply_cut2(&d, value);},
-            Command::Increment(value) => {d = apply_increment2(&d, value);}
+            Command::New => {
+                d = apply_new2(&d);
+            }
+            Command::Cut(value) => {
+                d = apply_cut2(&d, value);
+            }
+            Command::Increment(value) => {
+                d = apply_increment2(&d, value);
+            }
         }
     }
     d
@@ -176,19 +183,16 @@ pub fn part1(lines: &Vec<String>) -> i128 {
     let d = apply_commands(lines, 10007);
     let f = apply_commands2(lines, 10007);
 
-
     for i in 0..d.len() {
         let value = reverse(&f, i as i128);
         assert_eq!(value, d[i]);
     }
-
 
     for i in 0..d.len() {
         if d[i] == 2019 {
             return i as i128;
         }
     }
-
 
     unreachable!();
 }
@@ -200,8 +204,6 @@ pub fn part2(lines: &Vec<String>) -> i128 {
     reverse(&f, 2020)
 }
 
-
-
 fn as_deck(s: &str) -> Deck {
     let mut d = Deck::new();
     for part in split_string(&s.to_string(), " ") {
@@ -209,7 +211,6 @@ fn as_deck(s: &str) -> Deck {
     }
     d
 }
-
 
 fn pow_mod(a: i128, n: i128, p: i128) -> i128 {
     if n == 0 {
@@ -225,7 +226,6 @@ fn pow_mod(a: i128, n: i128, p: i128) -> i128 {
     }
 }
 
-
 fn reverse(f: &FastDeck, value: i128) -> i128 {
     let p = f.modulo;
     let rev_k = pow_mod(f.k, p - 2, p);
@@ -240,7 +240,7 @@ fn f_to_pow(f: &FastDeck, n: i128) -> FastDeck {
     let p = f.modulo;
     let rev_k_1 = pow_mod(k - 1, p - 2, p);
     let k_pow_n = pow_mod(k, n, p);
-    let mut f_new = FastDeck{
+    let mut f_new = FastDeck {
         k: k_pow_n,
         b: f.b * mod_op((k_pow_n - 1) * rev_k_1, p),
         modulo: p,
@@ -249,9 +249,8 @@ fn f_to_pow(f: &FastDeck, n: i128) -> FastDeck {
     f_new
 }
 
-
 fn to_deck(f: &FastDeck) -> Deck {
-    let mut d = vec![-1 ; f.modulo as usize];
+    let mut d = vec![-1; f.modulo as usize];
     for x in 0..f.modulo {
         let pos = mod_op(f.k * x + f.b, f.modulo) as usize;
         d[pos] = x as i128;
@@ -273,7 +272,6 @@ mod tests {
         d = apply_increment(&d, 3);
         assert_eq!(d, as_deck("0 7 4 1 8 5 2 9 6 3"));
     }
-
 
     #[test]
     fn test_cut() {
@@ -302,7 +300,8 @@ mod tests {
 deal with increment 7
 deal into new stack
 deal into new stack
-"#.trim();
+"#
+        .trim();
         let d = apply_commands(&to_lines(input), 10);
         assert_eq!(d, as_deck("0 3 6 9 2 5 8 1 4 7"));
     }
@@ -313,12 +312,11 @@ deal into new stack
 cut 6
 deal with increment 7
 deal into new stack
-"#.trim();
+"#
+        .trim();
         let d = apply_commands(&to_lines(input), 10);
         assert_eq!(d, as_deck("3 0 7 4 1 8 5 2 9 6"));
     }
-
-
 
     #[test]
     fn test_example3() {
@@ -326,7 +324,8 @@ deal into new stack
 deal with increment 7
 deal with increment 9
 cut -2
-"#.trim();
+"#
+        .trim();
         let d = apply_commands(&to_lines(input), 10);
         assert_eq!(d, as_deck("6 3 0 7 4 1 8 5 2 9"));
     }
@@ -344,11 +343,11 @@ cut 3
 deal with increment 9
 deal with increment 3
 cut -1
-"#.trim();
+"#
+        .trim();
         let d = apply_commands(&to_lines(input), 10);
         assert_eq!(d, as_deck("9 2 5 8 1 4 7 0 3 6"));
     }
-
 
     #[test]
     fn test_fast_increment() {
@@ -356,7 +355,6 @@ cut -1
         d = apply_increment2(&d, 3);
         assert_eq!(to_deck(&d), as_deck("0 7 4 1 8 5 2 9 6 3"));
     }
-
 
     #[test]
     fn test_fast_cut() {
@@ -385,7 +383,8 @@ cut -1
 deal with increment 7
 deal into new stack
 deal into new stack
-"#.trim();
+"#
+        .trim();
         let d = apply_commands2(&to_lines(input), 10);
         assert_eq!(to_deck(&d), as_deck("0 3 6 9 2 5 8 1 4 7"));
     }
@@ -396,12 +395,11 @@ deal into new stack
 cut 6
 deal with increment 7
 deal into new stack
-"#.trim();
+"#
+        .trim();
         let d = apply_commands2(&to_lines(input), 10);
         assert_eq!(to_deck(&d), as_deck("3 0 7 4 1 8 5 2 9 6"));
     }
-
-
 
     #[test]
     fn test_fast_example3() {
@@ -409,7 +407,8 @@ deal into new stack
 deal with increment 7
 deal with increment 9
 cut -2
-"#.trim();
+"#
+        .trim();
         let d = apply_commands2(&to_lines(input), 10);
         assert_eq!(to_deck(&d), as_deck("6 3 0 7 4 1 8 5 2 9"));
     }
@@ -427,7 +426,8 @@ cut 3
 deal with increment 9
 deal with increment 3
 cut -1
-"#.trim();
+"#
+        .trim();
         let d = apply_commands2(&to_lines(input), 10);
         assert_eq!(to_deck(&d), as_deck("9 2 5 8 1 4 7 0 3 6"));
     }

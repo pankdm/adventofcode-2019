@@ -1,12 +1,11 @@
 use std::collections::HashMap;
 use std::collections::{HashSet, VecDeque};
+use std::env;
 use std::fs::File;
 use std::io::{self, Write};
 use std::io::{BufRead, BufReader};
 use std::process;
 use std::time::{SystemTime, UNIX_EPOCH};
-use std::env;
-
 
 extern crate adventofcode;
 use adventofcode::*;
@@ -163,7 +162,6 @@ fn process_ops(vm: &mut Vm, input: &mut VecDeque<i64>) -> Vec<i64> {
     return res;
 }
 
-
 fn send_command(vm: &mut Vm, cmd: &String) -> Vec<String> {
     // let mut vm = _vm.clone();
     let mut input = VecDeque::new();
@@ -240,7 +238,7 @@ fn get_doors(output: &Vec<String>) -> Vec<String> {
         if line.to_string() == "Doors here lead:".to_string() {
             inside_doors = true;
         }
-    }    
+    }
     res
 }
 
@@ -250,7 +248,7 @@ fn get_location(output: &Vec<String>) -> String {
             let ln = line.len();
             return line[3..ln - 3].to_string();
         }
-    }   
+    }
     return "".to_string();
 }
 
@@ -280,7 +278,6 @@ fn try_drops(_vm: &Vm) -> (i32, Vec<String>) {
                 println!("{}", line);
             }
             return (mask as i32, items);
-
         }
 
         file.write_all(format!("trying mask {}", mask).as_bytes());
@@ -291,7 +288,6 @@ fn try_drops(_vm: &Vm) -> (i32, Vec<String>) {
     }
     return (-1, items);
 }
-
 
 fn try_drop(vm: &mut Vm, mask: usize, items: &Vec<String>) -> Vec<String> {
     let mut output = Vec::new();
@@ -311,13 +307,11 @@ fn try_drop(vm: &mut Vm, mask: usize, items: &Vec<String>) -> Vec<String> {
     output
 }
 
-
 struct MiniMap {
     x: i32,
     y: i32,
     grid: HashMap<(i32, i32), char>,
 }
-
 
 fn get_dxdy(door: &str) -> (i32, i32) {
     if door == "north" {
@@ -355,8 +349,10 @@ fn print_map(mini_map: &MiniMap) {
                 continue;
             }
             match mini_map.grid.get(&(x, y)) {
-                Some(c) => { print!("{}", c); },
-                _ => { print!(" ")}
+                Some(c) => {
+                    print!("{}", c);
+                }
+                _ => print!(" "),
             }
         }
         println!("");
@@ -364,8 +360,8 @@ fn print_map(mini_map: &MiniMap) {
     println!("");
 }
 
-
-fn make_step(vm: &mut Vm,
+fn make_step(
+    vm: &mut Vm,
     action: &String,
     now_loc: &mut String,
     visited: &mut HashSet<(String, String)>,
@@ -373,8 +369,8 @@ fn make_step(vm: &mut Vm,
     mini_map: &mut MiniMap,
     file: &mut File,
     with_logging: bool,
-    log: &mut File) {
-
+    log: &mut File,
+) {
     let line = action.clone();
     println!("    at {} got: {}", now_loc, line);
     file.write_all(line.as_bytes());
@@ -397,13 +393,11 @@ fn make_step(vm: &mut Vm,
         }
     }
 
-
     let doors = get_doors(&output);
     *now_loc = location.clone();
     for door in &doors {
         options.insert((location.to_string(), door.to_string()));
     }
-
 
     for c_dx in -1..=1 {
         for c_dy in -1..=1 {
@@ -460,24 +454,22 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     }
 
     let mut vm = Vm {
-            ops: ops.clone(),
-            index: 0,
-            base: 0,
+        ops: ops.clone(),
+        index: 0,
+        base: 0,
     };
 
     let now = SystemTime::now();
     let ts = now.duration_since(UNIX_EPOCH).unwrap().as_secs();
     let mut file = File::create(format!("foo-{}.txt", ts)).unwrap();
 
-
     let mut log = File::create("log.txt").unwrap();
 
     let mut mini_map = MiniMap {
-        x : 0,
-        y : 0,
+        x: 0,
+        y: 0,
         grid: HashMap::new(),
     };
-
 
     let mut now_loc = "".to_string();
     let mut visited = HashSet::new();
@@ -497,7 +489,8 @@ pub fn part1(lines: &Vec<String>) -> i64 {
         &mut mini_map,
         &mut file,
         false,
-        &mut log);
+        &mut log,
+    );
 
     for line_ in ff.lines() {
         let line = line_.unwrap();
@@ -510,7 +503,8 @@ pub fn part1(lines: &Vec<String>) -> i64 {
             &mut mini_map,
             &mut file,
             false,
-            &mut log);
+            &mut log,
+        );
     }
 
     let (mask, items) = try_drops(&vm);
@@ -518,7 +512,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     if mask != -1 {
         try_drop(&mut vm, mask as usize, &items);
     }
-
 
     // let mut file = File::create(format!("foo.txt", ts)).unwrap();
 
@@ -535,18 +528,19 @@ pub fn part1(lines: &Vec<String>) -> i64 {
             &mut mini_map,
             &mut file,
             false,
-            &mut log);
+            &mut log,
+        );
     }
-// Items in your inventory:
-// - festive hat
-// - space heater
-// - loom
-// - space law space brochure
-// - molten lava
-// - sand
-// - photons
-// - pointer
-// - wreath
+    // Items in your inventory:
+    // - festive hat
+    // - space heater
+    // - loom
+    // - space law space brochure
+    // - molten lava
+    // - sand
+    // - photons
+    // - pointer
+    // - wreath
 }
 
 // #[cfg(test)]
