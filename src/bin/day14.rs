@@ -16,8 +16,11 @@ struct Reaction {
     inputs: Vec<Elem>,
 }
 
+type ReactionMap = HashMap<String, Reaction>;
+type DepGraph = HashMap<String, HashSet<String>>;
 
-fn search(rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String>>) -> i64 {
+
+fn search(rs: &ReactionMap, graph: &DepGraph) -> i64 {
     let TRILLION = 1000000000000;
     let start = "FUEL".to_string();
     let mut lo = 1;
@@ -39,7 +42,7 @@ fn search(rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String
 }
 
 
-fn iterate(desired_: &HashMap<String, i64>, rs: &HashMap<String, Reaction>, graph: &HashMap<String, HashSet<String>>) -> i64 {
+fn iterate(desired_: &HashMap<String, i64>, rs: &ReactionMap, graph: &DepGraph) -> i64 {
     let mut desired = desired_.clone();
     let ore_key = "ORE".to_string();
     loop {
@@ -85,7 +88,7 @@ fn iterate(desired_: &HashMap<String, i64>, rs: &HashMap<String, Reaction>, grap
 }
 
 
-fn go_graph(now: String, rs: &HashMap<String, Reaction>, graph: &mut HashMap<String, HashSet<String>>) -> HashSet<String> {
+fn go_graph(now: String, rs: &ReactionMap, graph: &mut DepGraph) -> HashSet<String> {
     let mut res = HashSet::new();
     match graph.get(&now) {
         Some(ref rr) => {
@@ -112,30 +115,7 @@ fn go_graph(now: String, rs: &HashMap<String, Reaction>, graph: &mut HashMap<Str
 
 
 pub fn part1(lines: &Vec<String>) -> i64 {
-    let mut rs = HashMap::new();
-
-    for line in lines {
-        let parts = line.split(" => ").collect::<Vec<&str>>();
-        let _inputs = parts[0].split(", ").collect::<Vec<&str>>();
-
-        let mut inputs = Vec::new();
-        for input_ in _inputs {
-            let input = input_.split(" ").collect::<Vec<&str>>();
-            let cnt = input[0].parse::<i64>().unwrap();
-            let type_ = input[1].to_string();
-            let e_in = Elem {
-                cnt, type_
-            };
-            inputs.push(e_in);
-        }
-
-        let outputs = parts[1].split(" ").collect::<Vec<&str>>();
-        let cnt = outputs[0].parse::<i64>().unwrap();
-        let type_ = outputs[1].to_string();
-        let output = Elem{cnt, type_};
-        let r = Reaction{output, inputs};
-        rs.insert(r.output.type_.clone(), r);
-    }
+    let rs = parse_reactions(lines);
 
     let start = "FUEL".to_string();
     let mut graph = HashMap::new();
@@ -156,17 +136,17 @@ pub fn part1(lines: &Vec<String>) -> i64 {
 }
 
 
-pub fn part2(lines: &Vec<String>) -> i64 {
+fn parse_reactions(lines: &Vec<String>) -> ReactionMap {
     let mut rs = HashMap::new();
 
     for line in lines {
-        let parts = line.split(" => ").collect::<Vec<&str>>();
-        let _inputs = parts[0].split(", ").collect::<Vec<&str>>();
+        let parts = split_string(&line, " => ");
+        let inputs_ = split_string(&parts[0], ", ");
 
         let mut inputs = Vec::new();
-        for input_ in _inputs {
-            let input = input_.split(" ").collect::<Vec<&str>>();
-            let cnt = input[0].parse::<i64>().unwrap();
+        for input_ in inputs_ {
+            let input = split_string(&input_, " ");
+            let cnt = parse_i64(&input[0]);
             let type_ = input[1].to_string();
             let e_in = Elem {
                 cnt, type_
@@ -174,13 +154,18 @@ pub fn part2(lines: &Vec<String>) -> i64 {
             inputs.push(e_in);
         }
 
-        let outputs = parts[1].split(" ").collect::<Vec<&str>>();
-        let cnt = outputs[0].parse::<i64>().unwrap();
+        let outputs = split_string(&parts[1], " ");
+        let cnt = parse_i64(&outputs[0]);
         let type_ = outputs[1].to_string();
         let output = Elem{cnt, type_};
         let r = Reaction{output, inputs};
         rs.insert(r.output.type_.clone(), r);
     }
+    rs
+}
+
+pub fn part2(lines: &Vec<String>) -> i64 {
+    let rs = parse_reactions(lines);
 
     let mut graph = HashMap::new();
     let start = "FUEL".to_string();
