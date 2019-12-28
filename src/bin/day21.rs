@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use std::collections::{HashSet, VecDeque};
 use std::fs::File;
 use std::io::{self, Write};
-use std::io::{BufRead, BufReader};
 use std::process;
 
 extern crate adventofcode;
