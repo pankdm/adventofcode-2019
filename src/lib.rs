@@ -67,6 +67,7 @@ pub struct Vm {
     pub ops: Vec<i64>,
     index: usize,
     base: i64,
+    pub halted: bool,
 }
 
 impl Vm {
@@ -79,10 +80,15 @@ impl Vm {
             ops.push(parse_i64(&str_op));
         }
 
+        while ops.len() < 10000 {
+            ops.push(0);
+        }
+
         Vm {
             ops,
             index: 0,
-            base: 0
+            base: 0,
+            halted: false,
         }
     }
 }
@@ -112,7 +118,10 @@ pub fn process_ops(vm: &mut Vm, input: &mut VecDeque<i64>) -> Vec<i64> {
         let mc = value % 10;
 
         if op == 99 {
-            break;
+            vm.index = index;
+            vm.base = base;
+            vm.halted = true;
+            return res;
         } else {
             if op == 1 {
                 let a = ops[index + 1];
