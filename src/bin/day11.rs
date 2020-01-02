@@ -4,7 +4,6 @@ extern crate adventofcode;
 
 use adventofcode::*;
 
-
 type Grid = HashMap<(i64, i64), i64>;
 
 fn walk_robot(vm_start: &Vm, start_color: i64) -> Grid {
@@ -60,10 +59,10 @@ pub fn part2(lines: &Vec<String>) -> i64 {
     let mut vm = Vm::from_string(&lines[0]);
     let grid = walk_robot(&vm, 1);
 
-    let minx = grid.keys().map(|p| { p.0 }).min().unwrap();
-    let maxx = grid.keys().map(|p| { p.0 }).max().unwrap();
-    let miny = grid.keys().map(|p| { p.1 }).min().unwrap();
-    let maxy = grid.keys().map(|p| { p.1 }).max().unwrap();
+    let minx = grid.keys().map(|p| p.0).min().unwrap();
+    let maxx = grid.keys().map(|p| p.0).max().unwrap();
+    let miny = grid.keys().map(|p| p.1).min().unwrap();
+    let maxy = grid.keys().map(|p| p.1).max().unwrap();
 
     for y in miny..=maxy {
         for x in (minx..=maxx).rev() {

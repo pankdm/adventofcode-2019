@@ -3,7 +3,6 @@ use std::io::{self, Write};
 
 use std::io::Read;
 
-
 extern crate adventofcode;
 
 use adventofcode::*;
@@ -27,7 +26,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     total
 }
 
-fn handle(seq: Vec<i64>) -> i64{
+fn handle(seq: Vec<i64>) -> i64 {
     assert!(seq.len() % 3 == 0);
     let mut index = 0;
 
@@ -56,9 +55,9 @@ fn handle(seq: Vec<i64>) -> i64{
             score = tile;
             index += 3;
             continue;
-        } 
+        }
         mx = mx.max(x);
-        my = my.max(y);        
+        my = my.max(y);
 
         if tile == 0 {
             ch = ' ';
@@ -84,7 +83,6 @@ fn handle(seq: Vec<i64>) -> i64{
         index += 3;
     }
 
-
     for y in 0..my + 1 {
         for x in 0..mx + 1 {
             let mut ch = '?';
@@ -99,7 +97,6 @@ fn handle(seq: Vec<i64>) -> i64{
         }
         println!("");
     }
-    
 
     println!("score = {}", score);
     println!("paddle = {} at ({}, {})", paddle, px, py);
@@ -110,7 +107,7 @@ fn handle(seq: Vec<i64>) -> i64{
     // }
     // if px < bx {
     //     return 1;
-    // } 
+    // }
     // if px > bx {
     //     return -1;
     // }
@@ -139,13 +136,13 @@ pub fn part2(lines: &Vec<String>) -> i64 {
         // }
 
         let in_tmp: Option<i32> = std::io::stdin()
-            .bytes() 
+            .bytes()
             .next()
             .and_then(|result| result.ok())
             .map(|byte| byte as i32);
 
         let in_char = in_tmp.unwrap() as u8 as char;
-        
+
         let mut value = 0;
         if in_char == 'a' {
             value = -1;
@@ -189,11 +186,11 @@ mod tests {
         assert_eq!(part1(&lines), 242);
     }
 
-//     #[test]
-//     fn test_part2() {
-//         let lines = read_input("day11/in.txt");
-//         // assert_eq!(part2(&lines), 46643);
-//     }
+    //     #[test]
+    //     fn test_part2() {
+    //         let lines = read_input("day11/in.txt");
+    //         // assert_eq!(part2(&lines), 46643);
+    //     }
 }
 
 fn main() {

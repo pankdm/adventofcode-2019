@@ -4,7 +4,6 @@ extern crate adventofcode;
 
 use adventofcode::*;
 
-
 fn get_diagnostics_code(res: &Vec<i64>) -> i64 {
     let mut non_zero_count = 0;
     let mut ans = 0;

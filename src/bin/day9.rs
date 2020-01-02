@@ -4,25 +4,23 @@ extern crate adventofcode;
 
 use adventofcode::*;
 
-
 pub fn part1(lines: &Vec<String>) -> i64 {
     let mut vm = Vm::from_string(&lines[0]);
     let mut input = VecDeque::new();
 
     input.push_back(1);
-    
+
     let res = process_ops(&mut vm, &mut input);
     assert_eq!(res.len(), 1);
     res[0]
 }
-
 
 pub fn part2(lines: &Vec<String>) -> i64 {
     let mut vm = Vm::from_string(&lines[0]);
     let mut input = VecDeque::new();
 
     input.push_back(2);
-    
+
     let res = process_ops(&mut vm, &mut input);
     assert_eq!(res.len(), 1);
     res[0]

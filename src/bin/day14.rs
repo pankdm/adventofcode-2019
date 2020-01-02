@@ -1,7 +1,6 @@
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::collections::{HashMap, HashSet};
-
 
 extern crate adventofcode;
 use adventofcode::*;
@@ -18,7 +17,6 @@ struct Reaction {
 
 type ReactionMap = HashMap<String, Reaction>;
 type DepGraph = HashMap<String, HashSet<String>>;
-
 
 fn search(rs: &ReactionMap, graph: &DepGraph) -> i64 {
     let TRILLION = 1000000000000;
@@ -40,7 +38,6 @@ fn search(rs: &ReactionMap, graph: &DepGraph) -> i64 {
     }
     return lo;
 }
-
 
 fn iterate(desired_: &HashMap<String, i64>, rs: &ReactionMap, graph: &DepGraph) -> i64 {
     let mut desired = desired_.clone();
@@ -75,7 +72,6 @@ fn iterate(desired_: &HashMap<String, i64>, rs: &ReactionMap, graph: &DepGraph) 
 
         println!("unwrapping {} of {} elem", need, &best_key);
 
-
         desired.remove(&best_key);
         for input in &reaction.inputs {
             let extra = times * input.cnt;
@@ -86,7 +82,6 @@ fn iterate(desired_: &HashMap<String, i64>, rs: &ReactionMap, graph: &DepGraph) 
         }
     }
 }
-
 
 fn go_graph(now: String, rs: &ReactionMap, graph: &mut DepGraph) -> HashSet<String> {
     let mut res = HashSet::new();
@@ -113,7 +108,6 @@ fn go_graph(now: String, rs: &ReactionMap, graph: &mut DepGraph) -> HashSet<Stri
     return res;
 }
 
-
 pub fn part1(lines: &Vec<String>) -> i64 {
     let rs = parse_reactions(lines);
 
@@ -125,7 +119,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     }
     println!("  ");
 
-
     let mut desired = HashMap::new();
     desired.insert(start.clone(), 1);
     let ans = iterate(&desired, &rs, &graph);
@@ -134,7 +127,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     println!("ans = {}", ans);
     ans
 }
-
 
 fn parse_reactions(lines: &Vec<String>) -> ReactionMap {
     let mut rs = HashMap::new();
@@ -148,17 +140,15 @@ fn parse_reactions(lines: &Vec<String>) -> ReactionMap {
             let input = split_string(&input_, " ");
             let cnt = parse_i64(&input[0]);
             let type_ = input[1].to_string();
-            let e_in = Elem {
-                cnt, type_
-            };
+            let e_in = Elem { cnt, type_ };
             inputs.push(e_in);
         }
 
         let outputs = split_string(&parts[1], " ");
         let cnt = parse_i64(&outputs[0]);
         let type_ = outputs[1].to_string();
-        let output = Elem{cnt, type_};
-        let r = Reaction{output, inputs};
+        let output = Elem { cnt, type_ };
+        let r = Reaction { output, inputs };
         rs.insert(r.output.type_.clone(), r);
     }
     rs
@@ -197,7 +187,6 @@ mod tests {
         let lines = read_input("day14/in.txt");
         assert_eq!(part2(&lines), 1122036);
     }
-
 }
 
 fn main() {

@@ -2,8 +2,8 @@ extern crate adventofcode;
 
 use adventofcode::*;
 
-const START:i64 = 172851;
-const END:i64 = 675869;
+const START: i64 = 172851;
+const END: i64 = 675869;
 
 fn is_ok(x: i64) -> bool {
     let mut ds = Vec::new();
@@ -30,18 +30,16 @@ fn is_ok(x: i64) -> bool {
     return true;
 }
 
-
 pub fn part1() -> i64 {
     let mut count = 0;
 
-    for x in  START..=END {
+    for x in START..=END {
         if is_ok(x) {
             count += 1;
         }
     }
     count
 }
-
 
 fn is_ok2(x: i64) -> bool {
     let mut ds = Vec::new();
@@ -80,7 +78,7 @@ fn is_ok2(x: i64) -> bool {
 pub fn part2() -> i64 {
     let mut count = 0;
 
-    for x in  START..=END {
+    for x in START..=END {
         if is_ok2(x) {
             count += 1;
         }

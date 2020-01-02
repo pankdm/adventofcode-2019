@@ -39,7 +39,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     ans
 }
 
-
 fn run_ampl2(vm_start: &Vm, phase: Vec<i64>) -> i64 {
     let mut prev_value = 0;
 
@@ -74,19 +73,17 @@ fn run_ampl2(vm_start: &Vm, phase: Vec<i64>) -> i64 {
             break;
         }
 
-
         prev_value = val;
         // ans *= 10;
         // ans += prev_value;
         counter += 1;
         if counter > 200 {
-            break
+            break;
         }
     }
 
     return e_value;
 }
-
 
 pub fn part2(lines: &Vec<String>) -> i64 {
     let mut vm = Vm::from_string(&lines[0]);

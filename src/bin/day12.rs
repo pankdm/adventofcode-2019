@@ -1,6 +1,6 @@
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::collections::{HashMap, HashSet};
 
 extern crate adventofcode;
 use adventofcode::*;
@@ -19,7 +19,6 @@ fn nok(a: i64, b: i64) -> i64 {
     return a / gcd(a, b) * b;
 }
 
-
 const p: u64 = 1000003;
 
 pub fn part1(lines: &Vec<String>) -> i64 {
@@ -29,7 +28,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
 
     let mut pos = Vec::new();
     let mut vel = Vec::new();
-
 
     let mut count = 0;
     for line in lines {
@@ -57,7 +55,7 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     for i in 0..(pos.len() * 2 * 3 + 1) {
         let mut next = pows[i] * (p as u64);
         pows.push(next as u64);
-    } 
+    }
 
     for step in 0..STEPS {
         for i in 0..pos.len() {
@@ -79,7 +77,6 @@ pub fn part1(lines: &Vec<String>) -> i64 {
                 pos[i][c] += vel[i][c];
             }
         }
-
 
         let mut hash = 0 as u64;
         let mut cnt = 0;
@@ -119,14 +116,12 @@ pub fn part1(lines: &Vec<String>) -> i64 {
     ans
 }
 
-
 pub fn part2(lines: &Vec<String>) -> i64 {
     // let filename = "t1.txt";
     // let STEPS = 1000;
 
     let mut pos = Vec::new();
     let mut vel = Vec::new();
-
 
     let mut count = 0;
     for line in lines {
@@ -155,19 +150,17 @@ pub fn part2(lines: &Vec<String>) -> i64 {
         found.push(0 as u64);
     }
 
-    
-
     let mut pows = Vec::new();
     pows.push(1 as u64);
     for i in 0..(pos.len() * 2 * 3 + 1) {
         let mut next = pows[i] * p;
         pows.push(next as u64);
-    } 
+    }
 
     let mut step = 0;
     let mut tt = 0;
     let pr = 10000000;
-    let mut num_repeat = 0;    
+    let mut num_repeat = 0;
     loop {
         for i in 0..pos.len() {
             for j in (i + 1)..pos.len() {
@@ -189,7 +182,6 @@ pub fn part2(lines: &Vec<String>) -> i64 {
             }
         }
 
-
         // let mut hash = 0 as u64;
         // let mut cnt = 0;
         // for i in 0..pos.len() {
@@ -210,7 +202,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                 hash += pows[cnt] * vel[i][c] as u64;
                 cnt += 1;
                 hash += pows[cnt] * pos[i][c] as u64;
-                cnt += 1;                
+                cnt += 1;
             }
             if before[c].contains(&hash) {
                 found[c] = step;
@@ -223,7 +215,7 @@ pub fn part2(lines: &Vec<String>) -> i64 {
                     let ans = nok(nok(a, b), c);
                     println!("total = {}", ans);
                     return ans;
-                }                
+                }
             }
             before[c].insert(hash);
         }
